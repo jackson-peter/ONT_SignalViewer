@@ -1,13 +1,13 @@
 ###############################
 ####### VERSION 2.1 ###########
 ###############################
+#test
 library(shiny)
 library(tidyverse)
 library(data.table)
 library(DT)
 library(bedr)
 library(shinythemes)
-#library(bslib)
 library(shinydashboard)
 library(shinyFiles)
 library(ggsci)
@@ -21,6 +21,8 @@ library(BSgenome)
 ##################################################################################################################################################################### 
 HTSLIB_PATH = "/biotools/htslib/1.9/bin/"
 
+# If new files, just add symlinks in corresponding folder
+## TO DO: modify architecture if several projects for same species.
 kmer_dirs=list.dirs(path = "/home/jpeter/ShinyApps/app_f5c_v2/data", full.names = T, recursive = F)
 names(kmer_dirs)=lapply(kmer_dirs, basename)
 
