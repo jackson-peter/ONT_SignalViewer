@@ -1,7 +1,6 @@
 ###############################
 ####### VERSION 2.1 ###########
 ###############################
-#test
 library(shiny)
 library(tidyverse)
 library(data.table)
@@ -23,7 +22,7 @@ HTSLIB_PATH = "/biotools/htslib/1.9/bin/"
 
 # If new files, just add symlinks in corresponding folder
 ## TO DO: modify architecture if several projects for same species.
-kmer_dirs=list.dirs(path = "/home/jpeter/ShinyApps/app_f5c_v2/data", full.names = T, recursive = F)
+kmer_dirs=list.dirs(path = "/home/jpeter/ShinyApps/ONT_SignalViewer/data", full.names = T, recursive = F)
 names(kmer_dirs)=lapply(kmer_dirs, basename)
 
 ##################################################################################################################################################################### 
@@ -99,6 +98,8 @@ read.polished.tabix <- function(file, ROI, ref_fasta, header = FALSE) {
     mutate(zscore = (model_mean - event_level_mean) / model_stdv) %>%
     left_join(ROI_seq, by=c("ref_position", "chromosome"))
   
+  
+  
   return(dt)
 }
 # / Read tabix
@@ -158,8 +159,10 @@ server <- function(input, output, session) {
     ROI_start=ROI_vals$start
     ROI_end=ROI_vals$end
     
-    ref_fasta = list.files(path=input$species, pattern="fa|fas|fasta", full.names = T)
-    kmer_files <- list.files(path=file.path(input$species, "kmer_files"), pattern="*kmers_sorted.tsv.gz$", full.names = T, recursive = F)
+    # TO DO: If 0 or more than one fasta file found, issue error message
+    ref_fasta = list.files(path=file.path(input$species, "ReferenceFasta"), pattern="fa$|fas$|fasta$", full.names = T)
+    kmer_files <- list.files(path=file.path(input$species, "kmer_files"), pattern="*.tsv.gz$", full.names = T, recursive = F)
+    print(kmer_files)
     names(kmer_files)=lapply(kmer_files,basename)
     
     ROI_DF <- rbindlist(lapply(kmer_files, read.polished.tabix, ROI=input$ROI, ref_fasta), idcol = "origin")
